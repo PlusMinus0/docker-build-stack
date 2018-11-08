@@ -7,9 +7,12 @@ services:
 jobs:
   include:
     - stage: "Build and Test"
-      name: "cmake Test"
       script:
-        - docker build -t plusminus/cmake:build cmake/Dockerfile
-        - docker create -it --name cmake plusminus/cmake:build /bin/sh -c 'cd /test/ && cmake .'
+        - docker build -t plusminus/cmake:latest cmake/Dockerfile
+        - docker create -it --name cmake plusminus/cmake:latest /bin/sh -c 'cd /test/ && cmake .'
         - docker cp cmake/test/ cmake:/test/
-        - docker start -ai cmake 
+        - docker start -ai cmake
+        - docker build -t plusminus/gcc:latest gcc/Dockerfile
+        - docker create -it --name gcc plusminus/gcc:latest /bin/sh -c 'cd /test/ && cmake . && make && ./gcc-test'
+        - docker cp gcc/test gcc:/test/
+        - docker start -ai gcc
