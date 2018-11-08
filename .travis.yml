@@ -1,10 +1,15 @@
 sudo: required
+language: generic
 
 services:
   - docker
 
 jobs:
   include:
-    - stage: build
+    - stage: "Build and Test"
+      name: "cmake Test"
       script:
-        - docker build -t plusminus/cmake:latest cmake/Dockerfile/Dockerfile
+        - docker build -t plusminus/cmake:build cmake/Dockerfile
+        - docker create -it --name cmake plusminus/cmake:build /bin/sh -c 'cd /test/ && cmake .'
+        - docker cp cmake/test/ cmake:/test/
+        - docker start -ai cmake 
