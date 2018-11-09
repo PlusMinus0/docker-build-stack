@@ -20,3 +20,5 @@ jobs:
         - docker create -it --name qt plusminus/qt:latest /bin/sh -c 'cd /test/ && cmake . && make && QT_QPA_PLATFORM=offscreen ./qt-test'
         - docker cp qt/test qt:/test/
         - docker start -ai qt
+        - docker build -t plusminus/mitk:latest mitk/Dockerfile
+
