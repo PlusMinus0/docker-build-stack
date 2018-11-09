@@ -16,3 +16,7 @@ jobs:
         - docker create -it --name gcc plusminus/gcc:latest /bin/sh -c 'cd /test/ && cmake . && make && ./gcc-test'
         - docker cp gcc/test gcc:/test/
         - docker start -ai gcc
+        - docker build -t plusminus/qt:latest qt/Dockerfile
+        - docker create -it --name qt plusminus/qt:latest /bin/sh -c 'cd /test/ && cmake . && make && QT_QPA_PLATFORM=offscreen ./qt-test'
+        - docker cp qt/test qt:/test/
+        - docker start -ai qt
